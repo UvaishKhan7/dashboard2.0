@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import './login.css';
 import { useNavigate } from 'react-router-dom';
 import { useLoginUserMutation } from 'state/api';
-import Logo from 'assets/tech4build.png';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { setUser } from 'state';
 import { useDispatch } from 'react-redux';
 import { setToken } from 'state/authSlice';
@@ -54,7 +53,21 @@ export default function Login() {
             <div className="login_container">
                 <h3>Please Sign In</h3>
                 <div className="wrapper">
-                    <img src={Logo} alt="tech4build" />
+                    <Box display='flex' flexDirection='column' gap='1rem'>
+                        <Typography display='flex' flexDirection='column'>
+                            For User:
+                            <small>username: demo@abc.com</small>
+                        </Typography>
+                        <Typography display='flex' flexDirection='column'>
+                            For Admin:
+                            <small>username: demo@abc.com</small>
+                        </Typography>
+                        <Typography display='flex' flexDirection='column'>
+                            For Super User:
+                            <small>username: demo@abc.com</small>
+                        </Typography>
+                        <small>password: 123456</small>
+                    </Box>
                     <hr />
                     <form onSubmit={handleLogin}>
                         <Box sx={{ m: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
