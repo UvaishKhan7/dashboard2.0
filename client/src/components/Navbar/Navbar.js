@@ -22,7 +22,6 @@ import {
     DarkModeOutlined,
     Menu as MenuIcon,
     Search,
-    SettingsOutlined,
     ArrowDropDownOutlined,
 } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';

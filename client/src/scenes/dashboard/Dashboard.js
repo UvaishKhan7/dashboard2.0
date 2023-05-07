@@ -17,7 +17,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetClientsContactQuery, useGetEmployeesQuery } from "state/api";
+import { useGetClientsContactQuery, useGetUsersQuery } from "state/api";
 import StatBox from "components/StatBox/StatBox";
 import { useNavigate } from "react-router-dom";
 import BDMDashboard from "scenes/BDMDashboard/BDMDashboard";
@@ -31,7 +31,7 @@ const Dashboard = () => {
   const userPosition = localStorage.getItem("position");
 
   const client = useGetClientsContactQuery();
-  const { data, isLoading } = useGetEmployeesQuery();
+  const { data, isLoading } = useGetUsersQuery();
 
   const handleAddWork = () => {
     if (userPosition === "FullStack Developer" || userPosition === "FrontEnd Developer" || userPosition === "Backend Developer") {

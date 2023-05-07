@@ -60,11 +60,11 @@ export default function Login() {
                         </Typography>
                         <Typography display='flex' flexDirection='column'>
                             For Admin:
-                            <small>username: demo@abc.com</small>
+                            <small>username: demoadmin@abc.com</small>
                         </Typography>
                         <Typography display='flex' flexDirection='column'>
                             For Super User:
-                            <small>username: demo@abc.com</small>
+                            <small>username: superadmin@abc.com</small>
                         </Typography>
                         <small>password: 123456</small>
                     </Box>

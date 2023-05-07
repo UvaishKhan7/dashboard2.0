@@ -1,5 +1,4 @@
 import React from "react";
-import { Email, PointOfSale, } from "@mui/icons-material";
 import { Box, useTheme, } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import StatBox from "components/StatBox/StatBox";
@@ -64,25 +63,11 @@ const BDMDashboard = () => {
             >
                 <StatBox
                     title="Check In"
-                    value={data && data.length}
-                    //increase="+14%"
-                    //description="Since last month"
-                    icon={
-                        <Email
-                            sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                        />
-                    }
+                    value={data && data?.data.length}
                 />
                 <StatBox
                     title="Sales Today"
-                    value={data && data.length}
-                    increase="+21%"
-                    description="Since last month"
-                    icon={
-                        <PointOfSale
-                            sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                        />
-                    }
+                    value={data && data?.data.length}
                 />
             </Box>
 

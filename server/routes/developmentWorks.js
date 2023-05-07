@@ -38,6 +38,17 @@ router.patch('/:developmentWorkId', async (req, res) => {
     }
 });
 
+// Get all development work entries
+router.get('/all', async (req, res) => {
+    try {
+        const developmentWorks = await developmentWorksModel.find();
+        res.send(developmentWorks);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
 // Get all development work entries for an user
 router.get('/', async (req, res) => {
     try {

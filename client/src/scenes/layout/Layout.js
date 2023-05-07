@@ -3,7 +3,7 @@ import { Box, useMediaQuery } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Navbar from 'components/Navbar/Navbar';
 import Sidebar from 'components/Sidebar/Sidebar';
-import { useGetEmployeeQuery } from 'state/api';
+import { useGetUserQuery } from 'state/api';
 
 export default function Layout() {
 
@@ -12,7 +12,7 @@ export default function Layout() {
 
     const userId = localStorage.getItem("id");
 
-    const { data, isLoading } = useGetEmployeeQuery(userId);
+    const { data, isLoading } = useGetUserQuery(userId);
 
     return (
         <Box display={isNonMobile ? 'flex' : 'block'} maxWidth="100%" height="100%" >

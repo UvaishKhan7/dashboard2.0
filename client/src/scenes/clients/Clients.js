@@ -12,22 +12,18 @@ const Clients = () => {
         {
             field: "_id",
             headerName: "ID",
-            flex: 1,
         },
         {
             field: "fullName",
             headerName: "Client's Name",
-            flex: 1,
         },
         {
             field: "email",
             headerName: "Email",
-            flex: 1,
         },
         {
             field: "phone",
             headerName: "Phone Number",
-            flex: 1,
             renderCell: (params) => {
                 return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
             },
@@ -35,18 +31,15 @@ const Clients = () => {
         {
             field: "services",
             headerName: "Service",
-            flex: 1,
         },
         {
             field: "requirement",
             headerName: "Requirement",
-            flex: 1,
         },
         {
             field: "message",
             headerName: "Brief",
-            flex: 1,
-        },
+        }
     ];
 
     if (isLoading) {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Avatar, Box, Button, CircularProgress, useTheme } from "@mui/material";
-import { useGetEmployeesQuery, useUpdateEmployeeMutation } from "state/api";
+import { useUpdateUserMutation, useGetUsersQuery } from "state/api";
 import Header from "components/Header/Header";
 import { DataGrid } from "@mui/x-data-grid";
 import { Edit, PersonAdd } from "@mui/icons-material";
@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 const EmployeesList = () => {
     const theme = useTheme();
 
-    const { data, isLoading } = useGetEmployeesQuery();
-    const [updateEmployee] = useUpdateEmployeeMutation();
+    const { data, isLoading } = useGetUsersQuery();
+    const [updateEmployee] = useUpdateUserMutation();
 
     const navigate = useNavigate();
 
@@ -92,13 +92,6 @@ const EmployeesList = () => {
             </Box>
         )
     }
-    else if (!isLoading && (!data || data.length === 0)) {
-        return (
-            <Box display='flex' alignItems='center' justifyContent='center' width='100%' height='100%' m='0 auto'>
-                No Data Available
-            </Box>
-        )
-    }
 
     return (
         <Box m="1.5rem 2.5rem" pb='1rem'>
@@ -120,7 +113,7 @@ const EmployeesList = () => {
                 </Button>
             </Box>
             <Box
-                width={1024}
+                maxWidth={1024}
                 m="2rem 0"
                 height="75vh"
                 sx={{
@@ -161,13 +154,13 @@ const EmployeesList = () => {
                             cursor: "pointer",
                         },
                     },
-                    overflow: "auto",
+                    overflowX: "auto",
                 }}
             >
                 <DataGrid
                     rows={data || []}
                     columns={columns}
-                    loading={isLoading || !data}
+                    loading={isLoading}
                     getRowId={(row) => row._id} />
             </Box>
         </Box >

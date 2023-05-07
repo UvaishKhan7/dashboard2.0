@@ -7,7 +7,7 @@ import checkAuth from '../middleware/checkAuth.js';
 const router = express.Router();
 
 // login user
-router.post('/', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         console.log(req.body.email)
@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all user
-router.get('/', async (req, res) => {
+router.get('/', checkAuth('superadmin' || 'admin'), async (req, res) => {
     try {
         const user = await User.find();
         res.json(user);
@@ -84,7 +84,7 @@ router.post('/', checkAuth('superadmin' || 'admin'), async (req, res) => {
 
 
 // Update an existing user
-router.patch('/:id', checkAuth('superadmin' || 'admin'), getUser, async (req, res) => {
+router.patch('/:id', getUser, async (req, res) => {
     try {
         const { id } = req.params;
         const { password, ...update } = req.body;

@@ -16,16 +16,13 @@ import AddEmployee from 'scenes/addEmployee/AddEmployee';
 import AddBdmWork from 'scenes/addBdmWork/AddBdmWork';
 import AddDeveloperWork from 'scenes/addDeveloperWork/AddDeveloperWork';
 
-const employeeId = localStorage.getItem("id")
-
 const router = createBrowserRouter([
   { path: 'login', element: <Login /> },
   {
     loader: isLogin, element: <Layout />, children: [
-      { path: '/', element: <Navigate to={`/employees/${employeeId}`} replace /> },
-      { path: '/*', element: <Navigate to={`/employees/${employeeId}`} replace /> },
-      { path: '/dashboard', element: <Navigate to={`/employees/${employeeId}`} replace /> },
-      { path: `/employees/${employeeId}`, element: <Dashboard /> },
+      { path: '/', element: <Navigate to={`/dashboard`} replace /> },
+      { path: '/*', element: <Navigate to={`/dashboard`} replace /> },
+      { path: 'dashboard', element: <Dashboard /> },
       { path: 'clients', element: <Clients /> },
       { path: 'add_employee', element: <AddEmployee /> },
       { path: 'update_employee/:id', element: <AddEmployee /> },

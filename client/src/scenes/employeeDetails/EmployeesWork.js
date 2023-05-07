@@ -1,22 +1,23 @@
 import React from "react";
 import { Box, CircularProgress, useTheme } from "@mui/material";
-import { useGetClientsContactQuery } from "state/api";
+import { useGetBDMWorksQuery } from "state/api";
 import Header from "components/Header/Header";
 import { DataGrid } from "@mui/x-data-grid";
+import StatBox from "components/StatBox/StatBox";
 
 const EmployeesWork = () => {
     const theme = useTheme();
-    const { data, isLoading } = useGetClientsContactQuery();
+    const { data, isLoading } = useGetBDMWorksQuery();
 
     const columns = [
         {
-            field: "_id",
-            headerName: "ID",
+            field: "projectTitle",
+            headerName: "Project Title",
             flex: 1,
         },
         {
-            field: "fullName",
-            headerName: "Name",
+            field: "clientName",
+            headerName: "Client Name",
             flex: 1,
         },
         {
@@ -33,20 +34,18 @@ const EmployeesWork = () => {
             },
         },
         {
-            field: "services",
-            headerName: "Service",
+            field: "date",
+            headerName: "Date",
             flex: 1,
-        },
-        {
-            field: "requirement",
-            headerName: "Requirement",
-            flex: 1,
-        },
-        {
-            field: "message",
-            headerName: "Brief",
-            flex: 1,
-        },
+            renderCell: (params) => {
+                const date = new Date(params.value);
+                return date.toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "numeric",
+                    year: "numeric",
+                });
+            },
+        }
     ];
 
     if (isLoading) {
@@ -59,7 +58,27 @@ const EmployeesWork = () => {
 
     return (
         <Box m="1.5rem 2.5rem">
-            <Header title="Clients Contacted" subtitle="List of Clients contacted till now" />
+            <Header title="Work Entries" subtitle="List of work entries done by employees." />
+            {/* ROW 1 */}
+            <Box sx={{ display: "flex", gap: '1rem' }}
+            >
+                <StatBox
+                    title="BDM Work Entries"
+                    value={(data && data?.length) || []}
+                />
+                <StatBox
+                    title="Developer Work Entries"
+                    value={(data && data?.length) || []}
+                />
+                <StatBox
+                    title="Designer Work Entries"
+                    value={(data && data?.length) || []}
+                />
+                <StatBox
+                    title="Total Work Entries"
+                    value={(data && data?.length) || []}
+                />
+            </Box>
             <Box
                 mt="40px"
                 height="75vh"
@@ -89,7 +108,7 @@ const EmployeesWork = () => {
                 }}
             >
                 <DataGrid
-                    loading={isLoading || !data}
+                    loading={isLoading}
                     getRowId={(row) => row._id}
                     rows={data || []}
                     columns={columns}

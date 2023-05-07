@@ -139,8 +139,8 @@ const Sidebar = ({
                         <Box m="1rem auto" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
                             <FlexBetween display='flex' color={theme.palette.secondary.main}>
                                 <Box display="flex" alignItems="center" gap="0.5rem">
-                                    <Typography variant="h4" fontWeight="bold">
-                                        Tech4Build
+                                    <Typography variant="h5" fontWeight="bold">
+                                        THE TROUBLESHOOTER
                                     </Typography>
                                 </Box>
                                 {!isNonMobile && (

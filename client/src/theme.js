@@ -40,6 +40,18 @@ export const tokensDark = {
         800: "#665429",
         900: "#332a14",
     },
+    purple: {
+        50: "#fcfbff",
+        100: "#efedff",
+        200: "#e0dbff",
+        300: "#d0c9ff",
+        400: "#c1b7ff",
+        500: "#b1a5ff",
+        600: "#8e84cc",
+        700: "#6a6399",
+        800: "#474266",
+        900: "#232133"
+    },
 };
 
 // function that reverses the color palette
@@ -88,9 +100,9 @@ export const themeSettings = (mode) => {
                 : {
                     // palette values for light mode
                     primary: {
-                        ...tokensLight.primary,
-                        main: tokensDark.grey[50],
-                        light: tokensDark.grey[100],
+                        ...tokensLight.purple,
+                        main: tokensDark.purple[50],
+                        light: tokensDark.purple[100],
                     },
                     secondary: {
                         ...tokensLight.secondary,
@@ -98,12 +110,12 @@ export const themeSettings = (mode) => {
                         light: tokensDark.secondary[700],
                     },
                     neutral: {
-                        ...tokensLight.grey,
-                        main: tokensDark.grey[500],
+                        ...tokensLight.purple,
+                        main: tokensDark.purple[400],
                     },
                     background: {
-                        default: tokensDark.grey[0],
-                        alt: tokensDark.grey[50],
+                        default: tokensDark.purple[50],
+                        alt: tokensDark.purple[100],
                     },
                 }),
         },

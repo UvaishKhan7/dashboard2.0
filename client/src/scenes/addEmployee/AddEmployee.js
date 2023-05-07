@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, useTheme } from "@mui/material";
 import Header from "components/Header/Header";
-import { useAddEmployeeMutation, useGetEmployeesQuery } from "state/api";
+import { useAddUserMutation, useGetUsersQuery } from "state/api";
 import swal from "sweetalert";
 import { useNavigate, useParams } from "react-router-dom";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -40,12 +40,12 @@ const AddEmployee = () => {
     const theme = useTheme();
 
     const navigate = useNavigate();
-    const employee = useGetEmployeesQuery();
+    const employee = useGetUsersQuery();
     const lastEmployeeId = employee.data?.[employee.data?.length - 1]?.employeeId;
     const newEmployeeId = Number(lastEmployeeId) + 1;
     const userRole = localStorage.getItem("role");
 
-    const [addEmployee] = useAddEmployeeMutation();
+    const [addEmployee] = useAddUserMutation();
 
     const [uploading, setUploading] = useState(false);
     const { id } = useParams();

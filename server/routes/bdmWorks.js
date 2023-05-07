@@ -40,6 +40,17 @@ router.patch('/:bdmworkId', async (req, res) => {
     }
 });
 
+// Get all BDM work entries
+router.get('/all', async (req, res) => {
+    try {
+        const bdmWorks = await bdmWorksModel.find();
+        res.send(bdmWorks);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
 // Get all BDM work entries for an user
 router.get('/', async (req, res) => {
     try {
@@ -60,8 +71,6 @@ router.get('/', async (req, res) => {
         res.status(500).send({ error: 'Internal server error' });
     }
 });
-
-
 
 // Get a specific BDM work entry for an user
 router.get('/:bdmworkId', async (req, res) => {
