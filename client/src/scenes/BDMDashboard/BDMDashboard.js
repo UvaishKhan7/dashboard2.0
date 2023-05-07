@@ -9,6 +9,7 @@ const BDMDashboard = () => {
     const theme = useTheme();
     const employee = localStorage.getItem("id");
     const data = useGetBDMWorksQuery(employee);
+    console.log("data", data)
 
     const columnsBDM = [
         {
@@ -63,11 +64,11 @@ const BDMDashboard = () => {
             >
                 <StatBox
                     title="Check In"
-                    value={data && data?.data.length}
+                    value={data && data?.data?.length}
                 />
                 <StatBox
                     title="Sales Today"
-                    value={data && data?.data.length}
+                    value={data && data?.data?.length}
                 />
             </Box>
 

@@ -6,8 +6,6 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import clientRoutes from "./routes/client.js";
-import generalRoutes from "./routes/general.js";
-import employeesRoutes from "./routes/employees.js";
 import userRoutes from "./routes/user.js";
 import bdmWorksRoutes from "./routes/bdmWorks.js";
 import developmentWorksRoutes from "./routes/developmentWorks.js";
@@ -27,13 +25,9 @@ app.use(cors());
 
 /* ROUTES */
 app.use("/client", clientRoutes);
-app.use("/general", generalRoutes);
-app.use("/employees", employeesRoutes);
-
 app.use("/user", userRoutes);
 app.use("/bdmworks", bdmWorksRoutes);
 app.use("/developmentworks", developmentWorksRoutes);
-
 app.use("/project", projectRoutes);
 
 /* MONGOOSE SETUP */
