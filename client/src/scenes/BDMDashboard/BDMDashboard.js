@@ -2,14 +2,15 @@ import React from "react";
 import { Box, useTheme, } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import StatBox from "components/StatBox/StatBox";
-import { useGetBDMWorksQuery } from "state/api";
+import { useGetBDMWorksQuery, useGetUserLeavesQuery } from "state/api";
 
 const BDMDashboard = () => {
 
     const theme = useTheme();
     const employee = localStorage.getItem("id");
     const data = useGetBDMWorksQuery(employee);
-    console.log("data", data)
+
+    const leaves = useGetUserLeavesQuery(employee);
 
     const columnsBDM = [
         {
@@ -69,6 +70,10 @@ const BDMDashboard = () => {
                 <StatBox
                     title="Sales Today"
                     value={data && data?.data?.length}
+                />
+                <StatBox
+                    title="Total Leaves"
+                    value={leaves && leaves?.data?.length}
                 />
             </Box>
 

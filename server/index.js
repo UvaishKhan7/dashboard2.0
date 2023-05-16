@@ -10,6 +10,11 @@ import userRoutes from "./routes/user.js";
 import bdmWorksRoutes from "./routes/bdmWorks.js";
 import developmentWorksRoutes from "./routes/developmentWorks.js";
 import projectRoutes from "./routes/project.js";
+import financeDetailsRoutes from './routes/financeDetails.js';
+import leavesRoutes from './routes/leaves.js';
+import videoEditorRoutes from './routes/videoEditor.js';
+import socialMediaManagerRoutes from './routes/socialMediaManager.js';
+import contentWriterRoutes from './routes/contentWriter.js';
 
 /* CONFIGURATION */
 
@@ -28,7 +33,12 @@ app.use("/client", clientRoutes);
 app.use("/user", userRoutes);
 app.use("/bdmworks", bdmWorksRoutes);
 app.use("/developmentworks", developmentWorksRoutes);
+app.use("/videoeditor", videoEditorRoutes);
+app.use("/socialmediamanager", socialMediaManagerRoutes);
+app.use("/contentwriter", contentWriterRoutes);
+app.use("/financeDetails", financeDetailsRoutes);
 app.use("/project", projectRoutes);
+app.use("/leaves", leavesRoutes);
 
 /* MONGOOSE SETUP */
 

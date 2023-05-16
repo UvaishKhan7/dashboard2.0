@@ -40,17 +40,16 @@ export const tokensDark = {
         800: "#665429",
         900: "#332a14",
     },
-    purple: {
-        50: "#fcfbff",
-        100: "#efedff",
-        200: "#e0dbff",
-        300: "#d0c9ff",
-        400: "#c1b7ff",
-        500: "#b1a5ff",
-        600: "#8e84cc",
-        700: "#6a6399",
-        800: "#474266",
-        900: "#232133"
+    green: {
+        100: "#dbf8f2",
+        200: "#b6f1e6",
+        300: "#92ebd9",
+        400: "#6de4cd",
+        500: "#49ddc0",
+        600: "#3ab19a",
+        700: "#2c8573",
+        800: "#1d584d",
+        900: "#0f2c26"
     },
 };
 
@@ -100,22 +99,22 @@ export const themeSettings = (mode) => {
                 : {
                     // palette values for light mode
                     primary: {
-                        ...tokensLight.purple,
-                        main: tokensDark.purple[50],
-                        light: tokensDark.purple[100],
+                        ...tokensLight.green,
+                        main: tokensDark.green[100],
+                        light: tokensDark.green[200],
                     },
                     secondary: {
-                        ...tokensLight.secondary,
-                        main: tokensDark.secondary[600],
-                        light: tokensDark.secondary[700],
+                        ...tokensLight.green,
+                        main: tokensDark.green[800],
+                        light: tokensDark.green[900],
                     },
                     neutral: {
-                        ...tokensLight.purple,
-                        main: tokensDark.purple[400],
+                        ...tokensLight.green,
+                        main: tokensDark.green[400],
                     },
                     background: {
-                        default: tokensDark.purple[50],
-                        alt: tokensDark.purple[100],
+                        default: tokensDark.green[100],
+                        alt: tokensDark.green[200],
                     },
                 }),
         },

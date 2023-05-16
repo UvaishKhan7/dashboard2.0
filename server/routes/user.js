@@ -10,7 +10,6 @@ const router = express.Router();
 router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
-        console.log(req.body.email)
         if (!user) {
             return res.status(401).json({ msg: 'user does not exist!' });
         }
@@ -38,7 +37,7 @@ router.post('/login', async (req, res) => {
             position: user.position,
         });
     } catch (error) {
-        res.status(500).json({ msg: 'Login failed!', error: error });
+        res.status(500).json({ msg: 'Login failed!', error: error.message });
     }
 });
 
@@ -71,8 +70,10 @@ router.post('/', checkAuth('superadmin' || 'admin'), async (req, res) => {
             address: req.body.address,
             photo: req.body.photo,
             role: req.body.role,
-            status: req.body.status,
             doj: req.body.doj,
+            status: req.body.status,
+            nomineeName: req.body.nomineeName,
+            nomineeContact: req.body.nomineeContact,
             timestamps: true
         });
         const newUser = await user.save();

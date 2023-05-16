@@ -1,103 +1,116 @@
 import React from "react";
-import { Avatar, Box, Button, CircularProgress, useMediaQuery, useTheme } from "@mui/material";
-import { useGetUsersQuery } from "state/api";
+import { Box, Button, CircularProgress, useMediaQuery, useTheme } from "@mui/material";
+import { useDeleteLeaveMutation, useGetUserLeavesQuery } from "state/api";
 import Header from "components/Header/Header";
 import { DataGrid } from "@mui/x-data-grid";
-import { Edit, PersonAdd } from "@mui/icons-material";
+import { DeleteOutline, Edit, PersonAdd } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import swal from "sweetalert";
 
-const EmployeesList = () => {
+const YourLeaves = () => {
     const theme = useTheme();
 
-    const { data, isLoading } = useGetUsersQuery();
+    const userId = localStorage.getItem("id");
+
+    const { data, isLoading } = useGetUserLeavesQuery(userId);
+
     const [pageSize, setPageSize] = useState(10);
 
     const navigate = useNavigate();
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
+    const [deleteLeave] = useDeleteLeaveMutation();
+
+    const handleDelete = async (id) => {
+        try {
+            await swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then(async (willDelete) => {
+                    if (willDelete) {
+                        await deleteLeave(id)
+                        await swal("Poof! Your data has been deleted!", {
+                            icon: "success",
+                        });
+                        window.location.reload();
+                    } else {
+                        swal("Your data is safe!");
+                    }
+                });
+        } catch (error) {
+            swal("Something went wrong")
+        }
+    };
+
     const columns = [
         {
-            field: "photo",
-            headerName: "Photo",
-            width: 60,
-            renderCell: (params) => <Avatar src={params.row.photo || ""} />,
-            editable: false,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: "fullName",
+            field: "employeeName",
             headerName: "Employee's Name",
             width: 150,
         },
         {
-            field: "employeeId",
-            headerName: "Employee ID",
+            field: "leaveType",
+            headerName: "Leave Type",
             width: 100,
         },
         {
-            field: "email",
-            headerName: "Email",
-            width: 200,
-        },
-        {
-            field: "phone",
-            headerName: "Phone Number",
-            width: 130,
-            renderCell: (params) => {
-                return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-            },
-            editable: false,
-        },
-        {
-            field: "doj",
-            headerName: "Joining Date",
+            field: "leaveFrom",
+            headerName: "Leave From",
+            width: 110,
             renderCell: (params) => {
                 const date = new Date(params.value);
                 return date.toLocaleDateString("en-IN");
             },
         },
         {
-            field: "position",
-            headerName: "Position",
-            width: 180
+            field: "leaveUpto",
+            headerName: "Leave Upto",
+            width: 110,
+            renderCell: (params) => {
+                const date = new Date(params.value);
+                return date.toLocaleDateString("en-IN");
+            },
         },
         {
-            field: "status",
-            headerName: "Status",
+            field: "reason",
+            headerName: "Reaseon",
+            flex: 1,
+            editablle: true
         },
         {
-            field: "address",
-            headerName: "Address",
-            minWidth: 160,
-            editable: false,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: "_id",
-            headerName: "Database ID",
-            width: 200,
-            editable: false,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: "",
+            field: "edit",
             headerName: "Edit",
-            width: 50,
+            width: 60,
             renderCell: (params) => {
                 const id = params.row._id;
                 return (
-                    <Edit onClick={() => navigate(`/update_employee/${id}`)} />
+                    <Edit onClick={() => navigate(`/update_leave/${id}`)} />
                 );
             },
             editable: false,
             sortable: false,
             filterable: false,
         },
-    ]
+        {
+            field: "delete",
+            headerName: "Delete",
+            width: 60,
+            renderCell: (params) => {
+                const id = params.row._id;
+                return (
+                    <DeleteOutline onClick={() => handleDelete(id)} />
+                );
+            },
+            editable: false,
+            sortable: false,
+            filterable: false,
+        },
+    ];
 
     if (isLoading) {
         return (
@@ -105,11 +118,11 @@ const EmployeesList = () => {
                 <CircularProgress />
             </Box>
         )
-    }
+    };
 
     return (
         <Box m={isNonMediumScreens ? "1.5rem 2.5rem" : "1rem"} pb='1rem'>
-            <Header title="EMPLOYEES DETAILS" subtitle="List of Total Employees" />
+            <Header title="LEAVES DETAILS" subtitle="List of Leave Details of All Employees" />
             <Box>
                 <Button
                     sx={{
@@ -120,14 +133,15 @@ const EmployeesList = () => {
                         padding: "10px 20px",
                         mt: '1rem'
                     }}
-                    onClick={() => navigate('/add_employee')}
+                    onClick={() => {
+                        navigate('/add_leave');
+                    }}
                 >
                     <PersonAdd sx={{ mr: "10px" }} />
-                    Add New Employee
+                    Add Leave Details
                 </Button>
             </Box>
             <Box
-                maxWidth={1024}
                 m={isNonMediumScreens ? "2rem 0" : "1rem 0"}
                 height="75vh"
                 sx={{
@@ -190,4 +204,4 @@ const EmployeesList = () => {
     );
 };
 
-export default EmployeesList;
+export default YourLeaves;

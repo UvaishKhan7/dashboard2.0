@@ -1,16 +1,17 @@
 import React from "react";
-import { Avatar, Box, Button, CircularProgress, useMediaQuery, useTheme } from "@mui/material";
-import { useGetUsersQuery } from "state/api";
+import { Box, Button, CircularProgress, useMediaQuery, useTheme } from "@mui/material";
+import { useGetAllFinanceDetailsQuery } from "state/api";
 import Header from "components/Header/Header";
 import { DataGrid } from "@mui/x-data-grid";
 import { Edit, PersonAdd } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-const EmployeesList = () => {
+const FinanceDetails = () => {
     const theme = useTheme();
 
-    const { data, isLoading } = useGetUsersQuery();
+    const { data, isLoading } = useGetAllFinanceDetailsQuery();
+
     const [pageSize, setPageSize] = useState(10);
 
     const navigate = useNavigate();
@@ -18,70 +19,48 @@ const EmployeesList = () => {
 
     const columns = [
         {
-            field: "photo",
-            headerName: "Photo",
-            width: 60,
-            renderCell: (params) => <Avatar src={params.row.photo || ""} />,
-            editable: false,
-            sortable: false,
-            filterable: false,
-        },
-        {
-            field: "fullName",
+            field: "employeeName",
             headerName: "Employee's Name",
             width: 150,
         },
         {
             field: "employeeId",
-            headerName: "Employee ID",
+            headerName: "ID No.",
             width: 100,
         },
         {
-            field: "email",
-            headerName: "Email",
-            width: 200,
+            field: "aadhaar",
+            headerName: "AADHAAR Number",
+            width: 130,
+            sortable: false,
+            filterable: false,
         },
         {
-            field: "phone",
-            headerName: "Phone Number",
-            width: 130,
+            field: "pan",
+            headerName: "PAN Number",
+            width: 110,
             renderCell: (params) => {
                 return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
             },
-            editable: false,
+            sortable: false,
+            filterable: false,
         },
         {
-            field: "doj",
-            headerName: "Joining Date",
-            renderCell: (params) => {
-                const date = new Date(params.value);
-                return date.toLocaleDateString("en-IN");
-            },
+            field: "bankName",
+            headerName: "Bank Details",
+            width: 180,
+            editable: true
         },
         {
-            field: "position",
-            headerName: "Position",
-            width: 180
-        },
-        {
-            field: "status",
-            headerName: "Status",
-        },
-        {
-            field: "address",
-            headerName: "Address",
+            field: "accountNumber",
+            headerName: "Bank A/C No.",
             minWidth: 160,
-            editable: false,
-            sortable: false,
-            filterable: false,
         },
         {
-            field: "_id",
-            headerName: "Database ID",
-            width: 200,
-            editable: false,
-            sortable: false,
-            filterable: false,
+            field: "ifscCode",
+            headerName: "IFSC Code",
+            minWidth: 130,
+            editable: true,
         },
         {
             field: "",
@@ -90,13 +69,13 @@ const EmployeesList = () => {
             renderCell: (params) => {
                 const id = params.row._id;
                 return (
-                    <Edit onClick={() => navigate(`/update_employee/${id}`)} />
+                    <Edit onClick={() => navigate(`/update_finance_details/${id}`)} />
                 );
             },
             editable: false,
             sortable: false,
             filterable: false,
-        },
+        }
     ]
 
     if (isLoading) {
@@ -109,7 +88,7 @@ const EmployeesList = () => {
 
     return (
         <Box m={isNonMediumScreens ? "1.5rem 2.5rem" : "1rem"} pb='1rem'>
-            <Header title="EMPLOYEES DETAILS" subtitle="List of Total Employees" />
+            <Header title="FINANCE DETAILS" subtitle="List of Finance Details of All Employees" />
             <Box>
                 <Button
                     sx={{
@@ -120,10 +99,12 @@ const EmployeesList = () => {
                         padding: "10px 20px",
                         mt: '1rem'
                     }}
-                    onClick={() => navigate('/add_employee')}
+                    onClick={() => {
+                        navigate('/add_finance_details');
+                    }}
                 >
                     <PersonAdd sx={{ mr: "10px" }} />
-                    Add New Employee
+                    Add New Details
                 </Button>
             </Box>
             <Box
@@ -190,4 +171,4 @@ const EmployeesList = () => {
     );
 };
 
-export default EmployeesList;
+export default FinanceDetails;

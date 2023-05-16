@@ -1,29 +1,24 @@
 import React from "react";
-import {
-    Edit,
-    Email,
-    PointOfSale,
-} from "@mui/icons-material";
-import {
-    Box,
-    useTheme,
-} from "@mui/material";
+import { Box, Button, CircularProgress, useMediaQuery, useTheme } from "@mui/material";
+import { useGetAllDevelopersWorksQuery } from "state/api";
 import { DataGrid } from "@mui/x-data-grid";
-import { useGetDeveloperWorksQuery, useGetUserLeavesQuery } from "state/api";
-import StatBox from "components/StatBox/StatBox";
+import { ArrowBackOutlined } from "@mui/icons-material";
+import FlexBetween from "components/FlexBetween";
+import Header from "components/Header/Header";
 import { useNavigate } from "react-router-dom";
 
-const DeveloperDashboard = () => {
-
+const DeveloperWorks = () => {
     const theme = useTheme();
     const navigate = useNavigate();
+    const { data, isLoading } = useGetAllDevelopersWorksQuery();
+    const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
-    const employee = localStorage.getItem("id");
-    const developerWorkdata = useGetDeveloperWorksQuery(employee);
-
-    const leaves = useGetUserLeavesQuery(employee);
-
-    const columnsBDM = [
+    const columns = [
+        {
+            field: "userId",
+            headername: "Employee ID",
+            width: 200
+        },
         {
             field: "createdAt",
             headerName: "Entry On",
@@ -92,69 +87,39 @@ const DeveloperDashboard = () => {
             sortable: false,
             filterable: false,
         },
-        {
-            field: "edit",
-            headerName: "Edit",
-            width: 50,
-            renderCell: (params) => {
-                const id = params.row._id
-                return (
-                    < Edit
-                        onClick={() => {
-                            navigate(`/developerWorks/${id}`)
-                        }}
-                    />
-                )
-            },
-            editable: false,
-            sortable: false,
-            filterable: false,
-        },
     ];
 
-    return (
-        <Box
-            mt="1rem"
-            display="flex"
-            flexDirection="column"
-        >
-            {/* ROW 1 */}
-            <Box
-                display="flex"
-                gap="20px"
-            >
-                <StatBox
-                    title="Check In"
-                    value={developerWorkdata && developerWorkdata.length}
-                    //increase="+14%"
-                    //description="Since last month"
-                    icon={
-                        <Email
-                            sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                        />
-                    }
-                />
-                <StatBox
-                    title="Sales Today"
-                    value={developerWorkdata && developerWorkdata.length}
-                    increase="+21%"
-                    description="Since last month"
-                    icon={
-                        <PointOfSale
-                            sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                        />
-                    }
-                />
-                <StatBox
-                    title="Total Leaves"
-                    value={leaves && leaves?.data?.length}
-                />
-            </Box>
 
-            {/* ROW 2 */}
+    if (isLoading) {
+        return (
+            <Box display='flex' alignItems='center' justifyContent='center' width='100%' height='100%' m='0 auto'>
+                <CircularProgress />
+            </Box>
+        )
+    }
+
+    return (
+        <Box m={isNonMediumScreens ? "1.5rem 2.5rem" : "1rem"} pb={isNonMediumScreens ? '1rem' : '0.5rem'} maxWidth={isNonMediumScreens ? 1024 : '100%'} >
+            <FlexBetween>
+                <Header title="ALL DEVELOPERS WORKS" subtitle="Details of all work entries done by developers" />
+                <Box mt='1rem' display='flex' gap='1rem' >
+                    <Button
+                        sx={{
+                            backgroundColor: theme.palette.secondary.light,
+                            color: theme.palette.background.alt,
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            padding: "10px 20px",
+                        }}
+                        onClick={() => navigate('/work details')}
+                    >
+                        <ArrowBackOutlined sx={{ mr: "10px" }} />
+                        Go Back to All Employees Work Details
+                    </Button>
+                </Box>
+            </FlexBetween>
             <Box
-                maxWidth={1024}
-                margin="1rem auto"
+                m={isNonMediumScreens ? "2rem 0" : '1rem 0'}
                 height="75vh"
                 sx={{
                     "& .MuiDataGrid-root": {
@@ -179,32 +144,18 @@ const DeveloperDashboard = () => {
                     "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                         color: `${theme.palette.secondary[200]} !important`,
                     },
-                    "& .MuiDataGrid-row": {
-                        cursor: "pointer",
-                    },
-                    "& .MuiDataGrid-row.Mui-selected:hover": {
-                        backgroundColor: "transparent",
-                    },
-                    "& .MuiDataGrid-row.Mui-selected .MuiDataGrid-cell": {
-                        backgroundColor: theme.palette.primary[500],
-                        color: theme.palette.common.white,
-                    },
-                    "& .MuiDataGrid-cellEditable": {
-                        "& .MuiDataGrid-cell": {
-                            cursor: "pointer",
-                        },
-                    },
+                    overflowX: 'auto',
                 }}
             >
                 <DataGrid
-                    rows={developerWorkdata.data || []}
-                    columns={columnsBDM}
+                    loading={isLoading}
                     getRowId={(row) => row._id}
-                    disableSelectionOnClick
+                    rows={data || []}
+                    columns={columns}
                 />
             </Box>
         </Box>
     );
 };
 
-export default DeveloperDashboard;
+export default DeveloperWorks;

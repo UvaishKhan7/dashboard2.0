@@ -26,6 +26,10 @@ import {
     EqualizerOutlined,
     GroupsOutlined,
     LaptopMacOutlined,
+    SickOutlined,
+    EngineeringOutlined,
+    AccountBalanceOutlined,
+    HailOutlined,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -35,6 +39,10 @@ const navItems1 = [
     {
         text: "Dashboard",
         icon: <HomeOutlined />,
+    },
+    {
+        text: "Your Leaves",
+        icon: <SickOutlined />,
     }
 ]
 
@@ -48,13 +56,20 @@ const navItems2 = [
         icon: <GroupsOutlined />,
     },
     {
-        text: "Employees Attendance",
-        icon: <LaptopMacOutlined />,
+        text: "Attendance Details",
+        icon: <HailOutlined />,
     },
-
     {
-        text: "Employees Work",
-        icon: <LaptopMacOutlined />,
+        text: "Work Details",
+        icon: <EngineeringOutlined />,
+    },
+    {
+        text: "Finance Details",
+        icon: <AccountBalanceOutlined />,
+    },
+    {
+        text: "Leaves Details",
+        icon: <SickOutlined />,
     },
 ];
 
@@ -139,8 +154,8 @@ const Sidebar = ({
                         <Box m="1rem auto" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} >
                             <FlexBetween display='flex' color={theme.palette.secondary.main}>
                                 <Box display="flex" alignItems="center" gap="0.5rem">
-                                    <Typography variant="h5" fontWeight="bold">
-                                        THE TROUBLESHOOTER
+                                    <Typography variant="h4" fontWeight="bold">
+                                        Tech4Build
                                     </Typography>
                                 </Box>
                                 {!isNonMobile && (

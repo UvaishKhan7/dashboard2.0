@@ -1,6 +1,7 @@
 import express from 'express';
 import bdmWorksModel from '../models/bdmWorks.js';
 import userModel from '../models/user.js';
+import checkAuth from '../middleware/checkAuth.js';
 
 const router = express.Router();
 
@@ -9,17 +10,17 @@ router.post('/', async (req, res) => {
     try {
         const userId = req.body.userId;
         const bdmWork = new bdmWorksModel(req.body);
-        await bdmWork.save();
+        const newBdmWork = await bdmWork.save();
         const user = await userModel.findById(userId);
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
         user.bdmWorks.push(bdmWork._id);
         await user.save();
-        res.send(bdmWork);
+        res.send(newBdmWork);
     } catch (err) {
         console.error(err);
-        res.status(400).send({ error: 'Invalid input data' });
+        res.status(400).json({ message: err.message });
     }
 });
 
@@ -36,18 +37,18 @@ router.patch('/:bdmworkId', async (req, res) => {
         res.send(bdmWork);
     } catch (err) {
         console.error(err);
-        res.status(400).send({ error: 'Invalid input data' });
+        res.status(400).json({ message: err.message });
     }
 });
 
 // Get all BDM work entries
-router.get('/all', async (req, res) => {
+router.get('/all', checkAuth('superadmin' || 'admin'), async (req, res) => {
     try {
         const bdmWorks = await bdmWorksModel.find();
         res.send(bdmWorks);
     } catch (err) {
         console.error(err);
-        res.status(500).send({ error: 'Internal server error' });
+        res.status(500).json({ message: err.message });
     }
 });
 
@@ -68,7 +69,7 @@ router.get('/', async (req, res) => {
         res.send(bdmWorks);
     } catch (err) {
         console.error(err);
-        res.status(500).send({ error: 'Internal server error' });
+        res.status(500).json({ message: err.message });
     }
 });
 
@@ -84,7 +85,7 @@ router.get('/:bdmworkId', async (req, res) => {
         res.send(bdmWork);
     } catch (err) {
         console.error(err);
-        res.status(500).send({ error: 'Internal server error' });
+        res.status(500).json({ message: err.message });
     }
 });
 
@@ -95,9 +96,13 @@ router.delete('/:bdmworkId', async (req, res) => {
         if (!bdmWork) {
             return res.status(404).send({ error: 'BDM work not found' });
         }
-        res.send(bdmWork);
+
+        // Remove the bdmWork._id from the bdmWorks array of the user document
+        await userModel.findOneAndUpdate({ _id: bdmWork.userId }, { $pull: { bdmWorks: bdmWork._id } });
+
+        res.send({ message: "Details deleted successfully." });
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).json({ message: err.message });
     }
 });
 

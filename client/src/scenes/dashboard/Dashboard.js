@@ -5,8 +5,6 @@ import {
   DownloadOutlined,
   PointOfSale,
   PersonAdd,
-  Traffic,
-  EqualizerOutlined,
   StorageOutlined,
 } from "@mui/icons-material";
 import {
@@ -15,6 +13,7 @@ import {
   useTheme,
   CircularProgress,
   Avatar,
+  useMediaQuery,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useGetClientsContactQuery, useGetUsersQuery } from "state/api";
@@ -28,39 +27,38 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   const userRole = localStorage.getItem("role");
+  const userId = localStorage.getItem("id");
   const userPosition = localStorage.getItem("position");
 
   const client = useGetClientsContactQuery();
   const { data, isLoading } = useGetUsersQuery();
+  const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
   const handleAddWork = () => {
     if (userPosition === "FullStack Developer" || userPosition === "FrontEnd Developer" || userPosition === "Backend Developer") {
       navigate('/developerWorks')
     } else if (userPosition === "Business Development Manager" || userPosition === "Business Development Executive") {
       navigate('/bdmWorks')
+    } else if (userPosition === "Content Writer") {
+      navigate('/cwWorks')
     }
   }
 
   const columnsClients = [
     {
-      field: "_id",
-      headerName: "ID",
-      flex: 1,
-    },
-    {
       field: "fullName",
       headerName: "Client's Name",
-      flex: 1,
+      width: 180,
     },
     {
       field: "email",
       headerName: "Email",
-      flex: 1,
+      width: 200,
     },
     {
       field: "phone",
       headerName: "Phone Number",
-      flex: 1,
+      width: 130,
       renderCell: (params) => {
         return params.value.replace(/^(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
       },
@@ -68,17 +66,17 @@ const Dashboard = () => {
     {
       field: "services",
       headerName: "Service",
-      flex: 1,
+      width: 220,
     },
     {
       field: "requirement",
       headerName: "Requirement",
-      flex: 1,
+      width: 180,
     },
     {
       field: "message",
       headerName: "Brief",
-      flex: 1,
+      width: 220,
     },
   ];
 
@@ -149,11 +147,23 @@ const Dashboard = () => {
   }
 
   return (
-    <Box m="1.5rem 2.5rem" pb='1rem'>
+    <Box m={isNonMediumScreens ? "1.5rem 2.5rem" : "1rem"} pb={isNonMediumScreens ? '1rem' : '0.5rem'} maxWidth={isNonMediumScreens ? 1024 : '100%'} >
       <FlexBetween>
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Box sx={{
+          backgroundColor: theme.palette.secondary.light,
+          color: theme.palette.background.alt,
+          fontSize: "14px",
+          fontWeight: "bold",
+          padding: "10px 20px",
+          borderRadius: '0.25rem',
+          width: 'max-content',
+          mt: '0.5rem'
+        }}>
+          Your Database ID is: {userId}
+        </Box>
         {['employee'].includes(userRole) && (
-          <Box>
+          <Box mt='1rem' display='flex' gap='1rem' >
             <Button
               sx={{
                 backgroundColor: theme.palette.secondary.light,
@@ -167,10 +177,6 @@ const Dashboard = () => {
               <StorageOutlined sx={{ mr: "10px" }} />
               Add Your Work
             </Button>
-          </Box>
-        )}
-        {['superadmin'].includes(userRole) && (
-          <Box>
             <Button
               sx={{
                 backgroundColor: theme.palette.secondary.light,
@@ -179,13 +185,33 @@ const Dashboard = () => {
                 fontWeight: "bold",
                 padding: "10px 20px",
               }}
+              onClick={() => navigate('/add_leave')}
             >
-              <DownloadOutlined sx={{ mr: "10px" }} />
-              Download Reports
+              <StorageOutlined sx={{ mr: "10px" }} />
+              Add Leave Details
             </Button>
           </Box>
-        )}
-      </FlexBetween>
+        )
+        }
+        {
+          ['superadmin'].includes(userRole) && (
+            <Box mt='1rem'>
+              <Button
+                sx={{
+                  backgroundColor: theme.palette.secondary.light,
+                  color: theme.palette.background.alt,
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  padding: "10px 20px",
+                }}
+              >
+                <DownloadOutlined sx={{ mr: "10px" }} />
+                Download Reports
+              </Button>
+            </Box>
+          )
+        }
+      </FlexBetween >
 
       {['Business Development Manager', 'Business Development Executive'].includes(userPosition) && (
         <BDMDashboard />
@@ -194,207 +220,208 @@ const Dashboard = () => {
         <DeveloperDashboard />
       )}
 
-      {['admin'].includes(userRole) && (
-        <Box
-          m="20px auto"
-          sx={{
-            display: "flex",
-            flexDirection: 'column',
-            gap: '1rem',
-          }}
-        >
-          {/* ROW 1 */}
-          <Box sx={{ display: "flex", gap: '1rem' }}
-          >
-            <StatBox
-              title="Total Employees"
-              value={(data && data?.length) || []}
-              //increase="+14%"
-              //description="Since last month"
-              icon={
-                <PersonAdd
-                  sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                />
-              }
-            />
-            <StatBox
-              title="Total Projects Done"
-              value={(data && data?.length) || []}
-              //increase="+21%"
-              //description="Since last month"
-              icon={
-                <PointOfSale
-                  sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                />
-              }
-            />
-          </Box>
-
-          {/* ROW 2 */}
+      {
+        ['admin'].includes(userRole) && (
           <Box
-            m="2rem auto"
-            height="75vh"
-            width={1024}
+            m="20px auto"
             sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-              },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: theme.palette.background.alt,
-                color: theme.palette.secondary[100],
-                borderBottom: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme.palette.primary.light,
-              },
-              "& .MuiDataGrid-footerContainer": {
-                backgroundColor: theme.palette.background.alt,
-                color: theme.palette.secondary[100],
-                borderTop: "none",
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `${theme.palette.secondary[200]}!important`,
-              },
-              "& .MuiDataGrid-row": {
-                cursor: "pointer",
-              },
-              "& .MuiDataGrid-row.Mui-selected:hover": {
-                backgroundColor: "transparent",
-              },
-              "& .MuiDataGrid-row.Mui-selected .MuiDataGrid-cell": {
-                backgroundColor: theme.palette.primary[500],
-                color: theme.palette.common.white,
-              },
-              "& .MuiDataGrid-cellEditable": {
-                "& .MuiDataGrid-cell": {
-                  cursor: "pointer",
-                },
-                overflowX: "auto",
-              },
+              display: "flex",
+              flexDirection: 'column',
+              gap: '1rem',
             }}
           >
-            <DataGrid
-              loading={isLoading}
-              getRowId={(row) => row._id}
-              rows={data || []}
-              columns={columnsEmployees}
-              disableSelectionOnClick
-            />
-          </Box>
-        </Box>
-      )}
+            {/* ROW 1 */}
+            <Box sx={{ display: "flex", gap: '1rem' }}
+            >
+              <StatBox
+                title="Total Employees"
+                value={(data && data?.length) || []}
+                //increase="+14%"
+                //description="Since last month"
+                icon={
+                  <PersonAdd
+                    sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+                  />
+                }
+              />
+              <StatBox
+                title="Total Projects Done"
+                value={(data && data?.length) || []}
+                //increase="+21%"
+                //description="Since last month"
+                icon={
+                  <PointOfSale
+                    sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+                  />
+                }
+              />
+            </Box>
 
-      {['superadmin'].includes(userRole) && (
-        <Box
-          m="20px auto"
-        >
-          {/* ROW 1 */}
-          <Box sx={{ display: "flex", gap: '1rem' }}
-          >
-            <StatBox
-              title="Total Employees"
-              value={(data && data?.length) || []}
-              //increase="+14%"
-              //description="Since last month"
-              icon={
-                <PersonAdd
-                  sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                />
-              }
-            />
-            <StatBox
-              title="Total Clients"
-              value={(client && client?.data?.length) || []}
-              //increase="+21%"
-              //description="Since last month"
-              icon={
-                <PointOfSale
-                  sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                />
-              }
-            />
-            <StatBox
-              title="Total Projects Done"
-              value={(client && client?.length) || []}
-              increase="+5%"
-              description="Since last month"
-              icon={
-                <EqualizerOutlined
-                  sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                />
-              }
-            />
-            <StatBox
-              title="Yearly Sales"
-              value={(client && client?.length) || []}
-              increase="+43%"
-              description="Since last month"
-              icon={
-                <Traffic
-                  sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
-                />
-              }
-            />
-          </Box>
-
-          {/* ROW 2 */}
-          <Box
-            margin="2rem 0"
-            height="75vh"
-            sx={{
-              "& .MuiDataGrid-root": {
-                border: "none",
-              },
-              "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-              },
-              "& .MuiDataGrid-columnHeaders": {
-                backgroundColor: theme.palette.background.alt,
-                color: theme.palette.secondary[100],
-                borderBottom: "none",
-              },
-              "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: theme.palette.primary.light,
-              },
-              "& .MuiDataGrid-footerContainer": {
-                backgroundColor: theme.palette.background.alt,
-                color: theme.palette.secondary[100],
-                borderTop: "none",
-              },
-              "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-                color: `${theme.palette.secondary[200]}!important`,
-              },
-              "& .MuiDataGrid-row": {
-                cursor: "pointer",
-              },
-              "& .MuiDataGrid-row.Mui-selected:hover": {
-                backgroundColor: "transparent",
-              },
-              "& .MuiDataGrid-row.Mui-selected .MuiDataGrid-cell": {
-                backgroundColor: theme.palette.primary[500],
-                color: theme.palette.common.white,
-              },
-              "& .MuiDataGrid-cellEditable": {
+            {/* ROW 2 */}
+            <Box
+              m={isNonMediumScreens ? "2rem 0" : '1rem 0'}
+              height="75vh"
+              width={1024}
+              sx={{
+                "& .MuiDataGrid-root": {
+                  border: "none",
+                },
                 "& .MuiDataGrid-cell": {
+                  borderBottom: "none",
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: theme.palette.background.alt,
+                  color: theme.palette.secondary[100],
+                  borderBottom: "none",
+                },
+                "& .MuiDataGrid-virtualScroller": {
+                  backgroundColor: theme.palette.primary.light,
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  backgroundColor: theme.palette.background.alt,
+                  color: theme.palette.secondary[100],
+                  borderTop: "none",
+                },
+                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                  color: `${theme.palette.secondary[200]}!important`,
+                },
+                "& .MuiDataGrid-row": {
                   cursor: "pointer",
                 },
-              },
-              overflowX: 'auto',
-            }}
-          >
-            <DataGrid
-              rows={client.data || []}
-              columns={columnsClients}
-              loading={isLoading}
-              getRowId={(row) => row._id}
-            />
+                "& .MuiDataGrid-row.Mui-selected:hover": {
+                  backgroundColor: "transparent",
+                },
+                "& .MuiDataGrid-row.Mui-selected .MuiDataGrid-cell": {
+                  backgroundColor: theme.palette.primary[500],
+                  color: theme.palette.common.white,
+                },
+                "& .MuiDataGrid-cellEditable": {
+                  "& .MuiDataGrid-cell": {
+                    cursor: "pointer",
+                  },
+                  overflowX: "auto",
+                },
+              }}
+            >
+              <DataGrid
+                loading={isLoading}
+                getRowId={(row) => row._id}
+                rows={data || []}
+                columns={columnsEmployees}
+                disableSelectionOnClick
+              />
+            </Box>
           </Box>
-        </Box>
-      )}
-    </Box>
+        )
+      }
+
+      {
+        ['superadmin'].includes(userRole) && (
+          <Box
+            m={isNonMediumScreens ? '1rem' : '1rem 0'}
+            width='100%'
+          >
+            {/* ROW 1 */}
+            <Box sx={{ display: "flex", flexWrap: 'wrap', gap: '1rem', width: '100%' }}
+            >
+              <Box sx={{ display: "flex", justifyContent: 'space-between', gap: '1rem', width: (isNonMediumScreens ? 'max-content' : '100%') }}>
+                <StatBox
+                  title="Total Employees"
+                  value={(data && data?.length) || []}
+                  icon={
+                    <PersonAdd
+                      sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+                    />
+                  }
+                />
+                <StatBox
+                  title="Total Clients"
+                  value={(client && client?.data?.length) || []}
+                  icon={
+                    <PersonAdd
+                      sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+                    />
+                  }
+                />
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: 'space-between', gap: '1rem', width: (isNonMediumScreens ? 'max-content' : '100%') }}>
+                <StatBox
+                  title="Total Projects Done"
+                  value={(client && client?.data?.length) || []}
+                  icon={
+                    <PersonAdd
+                      sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+                    />
+                  }
+                />
+                <StatBox
+                  title="Yearly Sales"
+                  value={(client && client?.data?.length) || []}
+                  icon={
+                    <PersonAdd
+                      sx={{ color: theme.palette.secondary[300], fontSize: "26px" }}
+                    />
+                  }
+                />
+              </Box>
+            </Box>
+
+            {/* ROW 2 */}
+            <Box
+              margin={isNonMediumScreens ? "2rem 0" : '1rem 0'}
+              height="75vh"
+              sx={{
+                "& .MuiDataGrid-root": {
+                  border: "none",
+                },
+                "& .MuiDataGrid-cell": {
+                  borderBottom: "none",
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                  backgroundColor: theme.palette.background.alt,
+                  color: theme.palette.secondary[100],
+                  borderBottom: "none",
+                },
+                "& .MuiDataGrid-virtualScroller": {
+                  backgroundColor: theme.palette.primary.light,
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  backgroundColor: theme.palette.background.alt,
+                  color: theme.palette.secondary[100],
+                  borderTop: "none",
+                },
+                "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                  color: `${theme.palette.secondary[200]}!important`,
+                },
+                "& .MuiDataGrid-row": {
+                  cursor: "pointer",
+                },
+                "& .MuiDataGrid-row.Mui-selected:hover": {
+                  backgroundColor: "transparent",
+                },
+                "& .MuiDataGrid-row.Mui-selected .MuiDataGrid-cell": {
+                  backgroundColor: theme.palette.primary[500],
+                  color: theme.palette.common.white,
+                },
+                "& .MuiDataGrid-cellEditable": {
+                  "& .MuiDataGrid-cell": {
+                    cursor: "pointer",
+                  },
+                },
+                overflowX: 'auto',
+              }}
+            >
+              <DataGrid
+                rows={client.data || []}
+                columns={columnsClients}
+                loading={isLoading}
+                getRowId={(row) => row._id}
+              />
+            </Box>
+          </Box>
+        )
+      }
+    </Box >
   );
 };
 

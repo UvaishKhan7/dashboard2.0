@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -29,15 +30,17 @@ const userSchema = new Schema(
     position: {
       type: String,
       required: true,
-      min: 2,
     },
     phone: {
       type: String,
       required: true,
       min: 10,
-      max: 10
+      max: 14
     },
-    address: String,
+    address: {
+      type: String,
+      required: true
+    },
     photo: String,
     role: {
       type: String,
@@ -46,10 +49,29 @@ const userSchema = new Schema(
     },
     doj: {
       type: Date,
+      required: true
     },
-    status: String,
+    status: {
+      type: String,
+      required: true
+    },
+    nomineeName: {
+      type: String,
+      required: true
+    },
+    nomineeContact: {
+      type: String,
+      required: true,
+      min: 10,
+      max: 14
+    },
+    financeDetails:[{type: Schema.Types.ObjectId, ref: 'FinanceDetails'}],
     bdmWorks: [{ type: Schema.Types.ObjectId, ref: 'BDMWork' }],
-    developmentWorks: [{ type: Schema.Types.ObjectId, ref: 'DevelopmentWork' }]
+    developmentWorks: [{ type: Schema.Types.ObjectId, ref: 'DevelopmentWork' }],
+    videoEditor: [{ type: Schema.Types.ObjectId, ref: 'VideoEditor' }],
+    socialMediaManager: [{ type: Schema.Types.ObjectId, ref: 'SocialMediaManager' }],
+    contentWriter: [{ type: Schema.Types.ObjectId, ref: 'ContentWriter' }],
+    leaves: [{ type: Schema.Types.ObjectId, ref: 'Leaves' }],
   },
   { timestamps: true }
 );

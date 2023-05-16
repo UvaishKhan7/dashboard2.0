@@ -91,6 +91,10 @@ router.delete('/:developmentWorkId', async (req, res) => {
         if (!developmentWork) {
             return res.status(404).send({ error: 'development work not found' });
         }
+
+        // Remove the developmentWork._id from the developmentWorks array of the user document
+        await userModel.findOneAndUpdate({ _id: developmentWork.userId }, { $pull: { developmentWorks: developmentWork._id } });
+
         res.send(developmentWork);
     } catch (err) {
         res.status(500).send(err);

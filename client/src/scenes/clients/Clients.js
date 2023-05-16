@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, CircularProgress, useTheme } from "@mui/material";
+import { Box, CircularProgress, useMediaQuery, useTheme } from "@mui/material";
 import { useGetClientsContactQuery } from "state/api";
 import Header from "components/Header/Header";
 import { DataGrid } from "@mui/x-data-grid";
@@ -7,12 +7,9 @@ import { DataGrid } from "@mui/x-data-grid";
 const Clients = () => {
     const theme = useTheme();
     const { data, isLoading } = useGetClientsContactQuery();
+    const isNonMediumScreens = useMediaQuery("(min-width: 1200px)");
 
     const columns = [
-        {
-            field: "_id",
-            headerName: "ID",
-        },
         {
             field: "fullName",
             headerName: "Client's Name",
@@ -51,10 +48,10 @@ const Clients = () => {
     }
 
     return (
-        <Box m="1.5rem 2.5rem">
+        <Box m={isNonMediumScreens ? "1.5rem 2.5rem" : "1rem"} pb={isNonMediumScreens ? '1rem' : '0.5rem'}>
             <Header title="Clients Contacted" subtitle="List of Clients contacted till now" />
             <Box
-                mt="40px"
+                mt={isNonMediumScreens ? "2rem" : "1rem"}
                 height="75vh"
                 sx={{
                     "& .MuiDataGrid-root": {
@@ -79,6 +76,7 @@ const Clients = () => {
                     "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
                         color: `${theme.palette.secondary[200]} !important`,
                     },
+                    overflowX: 'auto',
                 }}
             >
                 <DataGrid
