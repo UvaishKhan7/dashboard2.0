@@ -155,7 +155,7 @@ const Sidebar = ({
                             <FlexBetween display='flex' color={theme.palette.secondary.main}>
                                 <Box display="flex" alignItems="center" gap="0.5rem">
                                     <Typography variant="h4" fontWeight="bold">
-                                        Tech4Build
+                                        The TroubleShooter
                                     </Typography>
                                 </Box>
                                 {!isNonMobile && (
