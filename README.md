@@ -3,13 +3,18 @@
 This repository contains the code for the **dashboard2.0** project. The project is a dashboard application built using a combination of React on the frontend and Node.js on the backend.
 
 To clone this project, you can use the following command in your terminal:
+
 through http
-```git clone https://github.com/UvaishKhan7/dashboard2.0.git```
+```
+git clone https://github.com/UvaishKhan7/dashboard2.0.git
+```
 
 or 
 
-through SSH 
-```git clone git@github.com:UvaishKhan7/dashboard2.0.git```
+through SSH
+```
+git clone git@github.com:UvaishKhan7/dashboard2.0.git
+```
 
 After cloning the repository, navigate to the `client` and `server` folders separately and run the following command to install the required dependencies:
 ```
