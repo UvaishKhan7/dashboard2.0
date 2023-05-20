@@ -4,7 +4,13 @@ This repository contains the code for the **dashboard2.0** project. The project 
 
 To clone this project, you can use the following command in your terminal:
 ```
-git clone <repo link>
+//through http
+git clone [<repo link>](https://github.com/UvaishKhan7/dashboard2.0.git)
+
+or 
+
+//through SSH 
+git clone [<repo link>](https://github.com/UvaishKhan7/dashboard2.0.git)
 ```
 
 After cloning the repository, navigate to the `client` and `server` folders separately and run the following command to install the required dependencies:
